@@ -1,0 +1,1 @@
+SELECT * FROM `inventory_data` WHERE player_id=?;

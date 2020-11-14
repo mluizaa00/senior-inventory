@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'br.com.luiza'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots'}
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
+    implementation 'com.github.DevNatan:inventory-framework:43074d61ba'
+    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.0.0'
+    implementation 'com.zaxxer:HikariCP:3.2.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
