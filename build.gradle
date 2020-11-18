@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 group 'br.com.luiza'
@@ -16,7 +17,8 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
-    implementation 'com.github.DevNatan:inventory-framework:43074d61ba'
+
+    implementation 'com.github.DevNatan:inventory-framework:30cfd0a'
     implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.0.0'
     implementation 'com.zaxxer:HikariCP:3.2.0'
 

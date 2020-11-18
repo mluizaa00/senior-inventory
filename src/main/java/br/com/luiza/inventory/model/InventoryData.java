@@ -2,7 +2,9 @@ package br.com.luiza.inventory.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import java.sql.Timestamp;
@@ -17,6 +19,10 @@ public class InventoryData {
 
     private final ItemStack[] items;
     private final Timestamp createdAt;
+
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(playerId);
+    }
 
     public void apply(PlayerInventory inventory) {
         inventory.clear();

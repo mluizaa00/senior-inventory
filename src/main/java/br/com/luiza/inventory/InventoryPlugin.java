@@ -5,17 +5,24 @@ import br.com.luiza.inventory.command.SearchCommand;
 import br.com.luiza.inventory.database.MySQLConnector;
 import br.com.luiza.inventory.model.InventoryData;
 import br.com.luiza.inventory.service.InventoryService;
+import br.com.luiza.inventory.view.BackupListView;
+import br.com.luiza.inventory.view.BackupView;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import me.saiintbrisson.bukkit.command.BukkitFrame;
+import me.saiintbrisson.minecraft.ViewFrame;
+import me.saiintbrisson.minecraft.ViewItem;
 import me.saiintbrisson.minecraft.command.message.MessageHolder;
 import me.saiintbrisson.minecraft.command.message.MessageType;
+import me.saiintbrisson.minecraft.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
@@ -26,6 +33,8 @@ public class InventoryPlugin extends JavaPlugin {
 
     private ExecutorService service;
     private InventoryService inventoryService;
+
+    private ViewFrame viewFrame;
 
     @Override
     @SneakyThrows
@@ -38,8 +47,6 @@ public class InventoryPlugin extends JavaPlugin {
           getConfig().getString("database.username"),
           getConfig().getString("database.password")
         );
-
-        registerCommands();
 
         this.service = new ThreadPoolExecutor(
           2, 4,
@@ -78,6 +85,9 @@ public class InventoryPlugin extends JavaPlugin {
                   inventoryService.insert(data);
               }
           }, 0L, 8, TimeUnit.HOURS);
+
+        registerCommands();
+        registerViews();
     }
 
     private void registerCommands() {
@@ -93,5 +103,25 @@ public class InventoryPlugin extends JavaPlugin {
           new BackupCommand(),
           new SearchCommand(this)
         );
+    }
+
+    private void registerViews() {
+        this.viewFrame = new ViewFrame(this);
+
+        viewFrame.register();
+
+        viewFrame.setDefaultNextPageItem(context -> new ViewItem(53).withItem(
+          new ItemBuilder(Material.ARROW)
+            .name("§aNext page")
+            .build()
+        ));
+
+        viewFrame.setDefaultPreviousPageItem(context -> new ViewItem(0).withItem(
+          new ItemBuilder(Material.ARROW)
+            .name("§aPrevious page")
+            .build()
+        ));
+
+        viewFrame.addView(new BackupListView(this), new BackupView(this));
     }
 }

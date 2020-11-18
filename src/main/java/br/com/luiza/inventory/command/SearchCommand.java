@@ -1,20 +1,19 @@
 package br.com.luiza.inventory.command;
 
 import br.com.luiza.inventory.InventoryPlugin;
-import br.com.luiza.inventory.holder.DataHolder;
 import br.com.luiza.inventory.model.InventoryData;
-import br.com.luiza.inventory.utils.DateFormatter;
 import br.com.luiza.inventory.utils.EventScheduler;
+import br.com.luiza.inventory.view.BackupListView;
+import br.com.luiza.inventory.view.BackupView;
+import com.google.common.collect.ImmutableMap;
 import me.saiintbrisson.minecraft.command.annotation.Command;
 import me.saiintbrisson.minecraft.command.annotation.Optional;
 import me.saiintbrisson.minecraft.command.command.Context;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -75,60 +74,17 @@ public class SearchCommand {
                 break;
             }
             case 1: {
-                runSearch(player, datas.get(0));
+                plugin.getViewFrame().open(BackupView.class, player, ImmutableMap.of(
+                  "data", datas.get(0)
+                ));
                 break;
             }
 
             default: {
-                player.sendMessage(" §e§lBACKUPS");
-                for (int i = 0; i < datas.size(); i++) {
-                    final InventoryData data = datas.get(i);
-
-                    player.sendMessage("§fID: §7"+ i + " §8| §fDate: §7" + DateFormatter.format(data.getCreatedAt()));
-                }
-
-                EventScheduler.of(plugin, AsyncPlayerChatEvent.class)
-                  .filter(event -> {
-                      if (!event.getPlayer().equals(player)) return false;
-
-                      try {
-                          Integer.parseInt(event.getMessage());
-                      } catch (NumberFormatException e) {
-                          player.sendMessage("§cYou sent a incorrect number, please try again.");
-                          return false;
-                      }
-
-                      return true;
-                  }).thenExecuteSync(event -> {
-                    event.setCancelled(true);
-
-                    final int i = Integer.parseInt(event.getMessage());
-                    final InventoryData data = datas.get(i);
-
-                    runSearch(player, data);
-
-                }).orTimeOutAfter(30, TimeUnit.SECONDS, () -> {
-                    player.sendMessage("§cSearch expired");
-                }).schedule();
+                plugin.getViewFrame().open(BackupListView.class, player, ImmutableMap.of(
+                  "search", offlinePlayer.getUniqueId()
+                ));
             }
-            break;
         }
-    }
-
-    private void runSearch(Player player, InventoryData data) {
-        final Inventory inventory = Bukkit.createInventory(
-          new DataHolder(data),
-          9 * 5,
-          Bukkit.getOfflinePlayer(data.getPlayerId()).getName() + " - " + DateFormatter.format(data.getCreatedAt())
-        );
-
-        for (int i = 0; i < data.getItems().length; i++) {
-            final ItemStack item = data.getItems()[i];
-            if (item == null || item.getType() == Material.AIR) continue;
-
-            inventory.setItem(i, item);
-        }
-
-        player.openInventory(inventory);
     }
 }
