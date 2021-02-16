@@ -1,4 +1,4 @@
 name: SeniorInventory
 author: Luiza
 version: 1.0.0
-main: br.com.luiza.inventory.InventoryPlugin
+main: com.luizaprestes.InventoryPlugin

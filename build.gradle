@@ -3,7 +3,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
-group 'br.com.luiza'
+group 'com.luizaprestes'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -12,18 +12,22 @@ repositories {
 
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots'}
+
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
 
-    implementation 'com.github.DevNatan:inventory-framework:30cfd0a'
-    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.0.0'
-    implementation 'com.zaxxer:HikariCP:3.2.0'
+    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
 
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    implementation 'com.github.rede-celeste.common:spigot:3b6e0b1dbc'
+    implementation 'com.github.rede-celeste.common:shared:3b6e0b1dbc'
+
+    implementation 'com.github.rede-celeste.databases:mysql-provider:7b18105d83'
+
+    compileOnly 'org.projectlombok:lombok:1.18.18'
+    annotationProcessor 'org.projectlombok:lombok:1.18.18'
 }
 
 tasks.withType(JavaCompile) {

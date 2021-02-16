@@ -1,4 +1,4 @@
-package br.com.luiza.inventory.model;
+package com.luizaprestes.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class InventoryData {
     private final UUID playerId;
 
     private final ItemStack[] items;
-    private final Timestamp createdAt;
+    private final Timestamp creationDate;
 
     public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(playerId);
@@ -34,4 +34,5 @@ public class InventoryData {
             inventory.setItem(i, item);
         }
     }
+
 }

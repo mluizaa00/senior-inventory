@@ -1,1 +1,0 @@
-DELETE FROM `ìnventory_data` WHERE DATEDIFF(now(), inventory_data.created_at) > ?;
